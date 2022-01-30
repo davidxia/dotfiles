@@ -1,0 +1,6 @@
+{{- $workemail := promptString "workemail" -}}
+
+data:
+  email: david@davidxia.com
+  workemail: {{ $workemail | quote }}
+  editor: vim

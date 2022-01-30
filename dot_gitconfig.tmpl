@@ -1,0 +1,49 @@
+[user]
+	name = David Xia
+	email = {{ .email }}
+	signingkey = DC90312C
+
+[core]
+	editor = {{ .editor }}
+	excludesfile = ~/.gitignore_global
+	pager = less
+	commentChar = ";"
+
+[color]
+	ui = auto
+
+[alias]
+	st = status
+	co = checkout
+	com = commit
+	br = branch
+	hist = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --
+	ctags = !.git/hooks/ctags
+
+[branch]
+	autosetuprebase = always
+
+[commit]
+	gpgsign = true
+    
+[push]
+	default = tracking
+	followTags = true
+    
+[init]
+	defaultBranch = master
+    
+[gpg]
+	program = gpg
+    
+[fetchk
+	prune = true
+    
+[rerere]
+	enabled = true
+
+[includeIf "gitdir:dev/"]
+	path = ~/.gitconfig_personal
+
+[includeIf "gitdir:src/"]
+	path = ~/.gitconfig_work
