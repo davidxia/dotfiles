@@ -1,15 +1,22 @@
 # Dotfiles
 
+These dotfiles are managed with [chezmoi]
 ## Installation
 
-These dotfiles are managed with [chezmoi]
+### OS X
 
 ```bash
   brew install chezmoi
-```
-
-```bash
   chezmoi init davidxia/dotfiles
 ```
+
+### Linux
+
+```bash
+  sudo apt update
+  sudo apt install snapd
+  snap install chezmoi
+```
+
 
 [chezmoi]: https://www.chezmoi.io/

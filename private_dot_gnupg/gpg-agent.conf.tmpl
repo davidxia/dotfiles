@@ -1,0 +1,11 @@
+{{ if eq .chezmoi.os "darwin" -}}
+enable-ssh-support
+default-cache-ttl 600
+max-cache-ttl 7200
+#extra-socket ${HOME}/.gnupg/S.gpg-agent.extra
+pinentry-program /opt/homebrew/bin/pinentry-mac
+# TODO: get this to work on M1 Mac
+#pinentry-program /opt/homebrew/opt/pinentry-touchid/bin/pinentry-touchid
+debug-level basic
+log-file ${HOME}/.gnupg/gpg-agent.log
+{{ end -}}

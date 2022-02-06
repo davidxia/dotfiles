@@ -1,0 +1,32 @@
+{{- if (eq .chezmoi.os "darwin") -}}
+#!/bin/bash
+
+brew bundle --no-lock --file=/dev/stdin <<EOF
+tap "homebrew/cask"
+tap "homebrew/cask-fonts"
+tap "homebrew/core"
+#tap "jorgelbg/tap"
+
+brew "fish"
+brew "gh"
+brew "gnupg"
+brew "grep"
+brew "jq"
+brew "kubernetes-cli"
+brew "pinentry-mac"
+#brew "pinentry-touchid"
+brew "starship"
+brew "tree"
+brew "watch"
+brew "wget"
+
+cask "google-chrome"
+cask "google-cloud-sdk"
+EOF
+
+# install https://github.com/oh-my-fish/oh-my-fish
+curl https://raw.githubusercontent.com/oh-my-fish/oh-my-fish/master/bin/install | fish
+omf update
+omf install bass google-cloud-sdk-fish-completion
+
+{{ end -}}
