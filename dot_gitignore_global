@@ -49,3 +49,6 @@ xcuserdata
 *.iml
 .idea
 .editorconfig
+
+# pyenv files
+.python-version
