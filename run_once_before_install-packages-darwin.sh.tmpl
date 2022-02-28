@@ -26,7 +26,6 @@ EOF
 
 # install https://github.com/oh-my-fish/oh-my-fish
 curl https://raw.githubusercontent.com/oh-my-fish/oh-my-fish/master/bin/install | fish
-omf update
-omf install bass google-cloud-sdk-fish-completion
+fish -c "omf update; and omf install bass google-cloud-sdk-fish-completion"
 
 {{ end -}}
