@@ -1,1 +1,2 @@
 set history=10000
+set nojoinspaces
