@@ -50,5 +50,6 @@ xcuserdata
 .idea
 .editorconfig
 
-# pyenv files
+# language version manager files
 .python-version
+.go-version
