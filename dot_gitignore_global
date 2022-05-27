@@ -44,11 +44,12 @@ Thumbs.db
 ###########################
 xcuserdata
 
-# IntelliJ generated files #
+# IDE generated files #
 ############################
 *.iml
 .idea
 .editorconfig
+.vscode
 
 # language version manager files
 .python-version
