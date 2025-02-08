@@ -26,24 +26,31 @@
 [commit]
 	gpgsign = true
     
+[tag]
+	gpgsign = true
+
 [push]
 	default = tracking
 	followTags = true
+	autoSetupRemote = true
     
 [init]
 	defaultBranch = master
     
 [gpg]
 	program = gpg
-    
+
+[gpg "ssh"]
+        allowedSignersFile = /Users/dxia/.ssh/allowed_signers    
+
 [fetch]
 	prune = true
     
 [rerere]
 	enabled = true
 
-[includeIf "gitdir:dev/"]
+[includeIf "gitdir:src/github.com"]
 	path = ~/.gitconfig_personal
 
-[includeIf "gitdir:src/"]
+[includeIf "gitdir:src/ghe.spotify.net"]
 	path = ~/.gitconfig_work
