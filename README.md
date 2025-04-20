@@ -1,6 +1,7 @@
 # Dotfiles
 
-These dotfiles are managed with [chezmoi]
+These dotfiles are managed with [chezmoi].
+
 ## Installation
 
 ### OS X
@@ -15,7 +16,7 @@ These dotfiles are managed with [chezmoi]
 ```bash
   sudo apt update
   sudo apt install snapd
-  snap install chezmoi
+  sudo snap install chezmoi --classic
 ```
 
 
