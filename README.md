@@ -17,7 +17,7 @@ These dotfiles are managed with [chezmoi].
   sudo apt update
   sudo apt install snapd
   sudo snap install chezmoi --classic
+  chezmoi init davidxia/dotfiles
 ```
-
 
 [chezmoi]: https://www.chezmoi.io/
