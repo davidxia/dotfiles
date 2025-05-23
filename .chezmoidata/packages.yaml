@@ -1,0 +1,26 @@
+packages:
+  darwin:
+    brews:
+    - git
+    - fish
+    - gh
+    - gnupg
+    - grep
+    - jq
+    - kubernetes-cli
+    - pinentry-mac
+    - pinentry-touchid
+    - speedtest-cli
+    - starship
+    - tree
+    - watch
+    - wget
+    casks:
+    - google-chrome
+    - google-cloud-sdk
+  ubuntu:
+    apt:
+    - snapd
+    snaps:
+      edge:
+      - starship

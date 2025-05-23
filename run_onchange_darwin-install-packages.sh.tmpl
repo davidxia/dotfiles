@@ -1,28 +1,21 @@
-{{- if (eq .chezmoi.os "darwin") -}}
+{{ if eq .chezmoi.os "darwin" -}}
 #!/bin/bash
 
-brew bundle --no-lock --file=/dev/stdin <<EOF
+brew bundle --file=/dev/stdin <<EOF
+
 tap "homebrew/cask"
 tap "homebrew/cask-fonts"
 tap "homebrew/core"
 #tap "jorgelbg/tap"
 
-brew "fish"
-brew "gh"
-brew "gnupg"
-brew "grep"
-brew "jq"
-brew "kubernetes-cli"
-brew "pinentry-mac"
-#brew "pinentry-touchid"
-brew "speedtest-cli"
-brew "starship"
-brew "tree"
-brew "watch"
-brew "wget"
+{{ range .packages.darwin.brews -}}
+brew {{ . | quote }}
+{{ end -}}
 
-cask "google-chrome"
-cask "google-cloud-sdk"
+{{ range .packages.darwin.casks -}}
+cask {{ . | quote }}
+{{ end -}}
+
 EOF
 
 # install https://github.com/oh-my-fish/oh-my-fish

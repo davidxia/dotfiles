@@ -1,0 +1,16 @@
+{{ if eq .osid "linux-ubuntu" -}}
+#!/bin/bash
+
+sudo apt update
+
+{{ range .packages.ubuntu.apt -}}
+sudo apt install {{ . | quote }}
+{{ end -}}
+
+{{ range $channel, $packages := .packages.ubuntu.snaps -}}
+{{ range $packages -}}
+sudo snap install {{ . | quote }} --{{ $channel }}
+{{ end -}}
+{{ end }}
+
+{{ end -}}
