@@ -18,6 +18,18 @@ cask {{ . | quote }}
 
 EOF
 
+{{ if has "fish" .packages.darwin.brews -}}
+sudo chsh -s $(which fish) $(whoami)
+{{ end -}}
+
+{{ if has "starship" .packages.darwin.brews -}}
+grep -q "starship init bash" ~/.bashrc || echo 'eval "$(starship init bash)"' >> ~/.bashrc
+
+{{ if has "fish" .packages.darwin.brews -}}
+grep -q "starship init fish" ~/.config/fish/config.fish || echo 'starship init fish | source' >> ~/.config/fish/config.fish
+{{ end -}}
+{{ end -}}
+
 # install https://github.com/oh-my-fish/oh-my-fish
 curl https://raw.githubusercontent.com/oh-my-fish/oh-my-fish/master/bin/install | fish
 fish -c "omf update; and omf install bass google-cloud-sdk-fish-completion"

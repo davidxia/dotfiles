@@ -54,3 +54,4 @@ xcuserdata
 # language version manager files
 .python-version
 .go-version
+.sdkmanrc
