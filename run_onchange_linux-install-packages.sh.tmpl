@@ -28,7 +28,7 @@ grep -q "starship init fish" ~/.config/fish/config.fish || echo 'starship init f
 curl -LsSf https://astral.sh/uv/install.sh | sh
 grep -q "uv generate-shell-completion bash" ~/.bashrc || echo 'eval "$(uv generate-shell-completion bash)"' >> ~/.bashrc
 {{ if has "fish" .packages.ubuntu.apt -}}
-echo 'uv generate-shell-completion fish | source' > ~/.config/fish/completions/uv.fish
+mkdir -p ~/.config/fish/completions && echo 'uv generate-shell-completion fish | source' > ~/.config/fish/completions/uv.fish
 {{ end -}}
 
 {{ end -}}
