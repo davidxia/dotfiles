@@ -17,7 +17,7 @@
 	co = checkout
 	com = commit
 	br = branch
-	hist = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --
+	hist = log --pretty=format:'%C(yellow)%h %Cred%ad %Cblue%an%Cgreen%d %Creset%s' --date=short
 	ctags = !.git/hooks/ctags
 
 [branch]
