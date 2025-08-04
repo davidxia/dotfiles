@@ -24,8 +24,14 @@ chezmoi apply -v
 
 ## TODO
 
-* [install uv]
-* [install gh]
+* create `~/src/github.com` dir
+* [install uv] for macOS
+* install Monaco nerdfont for macOS
+* try to export and load iTerm2 profile
+* [install gh] for Linux?
+* install IDEs like VS Code
+* SSH config
+* yubikey and gpg config for macOS
 * [install goenv] and use `source (goenv init - | psub)` in ~/.config/fish/config.fish
 * see <https://natelandau.com/managing-dotfiles-with-chezmoi/>
 
