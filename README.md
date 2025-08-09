@@ -30,9 +30,8 @@ chezmoi apply -v
 * try to export and load iTerm2 profile
 * [install gh] for Linux?
 * install IDEs like VS Code
-* SSH config
 * yubikey and gpg config for macOS
-* [install goenv] and use `source (goenv init - | psub)` in ~/.config/fish/config.fish
+* [install goenv] and use `source (goenv init - | psub)` in `~/.config/fish/config.fish`
 * see <https://natelandau.com/managing-dotfiles-with-chezmoi/>
 
 [chezmoi]: https://www.chezmoi.io/
