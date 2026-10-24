@@ -2,7 +2,7 @@
 #!/bin/bash
 set -euo pipefail
 
-brew bundle --file=/dev/stdin <<EOF
+brew bundle install --no-upgrade --file=/dev/stdin <<EOF
 
 {{ range .packages.darwin.brews -}}
 brew {{ . | quote }}
