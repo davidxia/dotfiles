@@ -1,24 +1,36 @@
 packages:
   darwin:
     brews:
+    - chezmoi
     - difftastic
-    - git
+    - dust
     - fish
     - gh
+    - git
     - gnupg
     - grep
+    - httpie
     - jq
     - kubernetes-cli
     - pinentry-mac
     - speedtest-cli
     - starship
+    - subnetcalc
     - tree
     - watch
     - wget
+    - yq
     casks:
-    - google-chrome
+    - dropbox
+    - flux-app
     - gcloud-cli
+    - ghostty
+    - gitify
+    - google-chrome
+    - rectangle
+    - visual-studio-code
   ubuntu:
+    # gh comes from GitHub's apt repo, which the install script adds.
     apt:
     - curl
     - fish
@@ -26,11 +38,38 @@ packages:
     - git
     - gnupg
     - grep
+    - httpie
     - jq
+    - procps
     - snapd
+    - speedtest-cli
+    - subnetcalc
     - tree
-    - watch
     - wget
     snaps:
-      edge:
-      - starship
+    - name: chezmoi
+      classic: true
+    - name: starship
+      channel: edge
+  ol:
+    # Most of these come from EPEL. gh comes from GitHub's repo, which the
+    # install script adds.
+    dnf:
+    - difftastic
+    - fish
+    - gh
+    - git
+    - gnupg2
+    - grep
+    - httpie
+    - ipcalc
+    - jq
+    - procps-ng
+    - snapd
+    - speedtest-cli
+    - tree
+    - wget
+    - yq
+    snaps:
+    - name: chezmoi
+      classic: true

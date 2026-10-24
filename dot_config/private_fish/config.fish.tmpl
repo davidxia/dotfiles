@@ -37,7 +37,9 @@ if status --is-interactive
   end
 
   if test -d $HOME/.goenv
-    set -x GOENV_ROOT $HOME/.goenv; set -x PATH $GOENV_ROOT $PATH; source (goenv init - | psub)
+    set -x GOENV_ROOT $HOME/.goenv
+    fish_add_path --path $GOENV_ROOT/bin
+    source (goenv init - | psub)
   end
 
   if test -f $HOME/.cargo/env.fish

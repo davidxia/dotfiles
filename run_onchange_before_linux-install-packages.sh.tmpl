@@ -1,0 +1,31 @@
+{{ if eq .osid "linux-ubuntu" -}}
+#!/bin/bash
+set -euo pipefail
+
+# GitHub CLI apt repo: https://github.com/cli/cli/blob/trunk/docs/install_linux.md
+if [ ! -f /etc/apt/sources.list.d/github-cli.list ]; then
+  if ! command -v curl >/dev/null; then
+    sudo apt update
+    sudo apt install --yes --no-install-recommends ca-certificates curl
+  fi
+  sudo mkdir -p -m 755 /etc/apt/keyrings
+  keyring="$(mktemp)"
+  curl -fsSL -o "$keyring" https://cli.github.com/packages/githubcli-archive-keyring.gpg
+  sudo install -m 644 "$keyring" /etc/apt/keyrings/githubcli-archive-keyring.gpg
+  rm -f "$keyring"
+  echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" |
+    sudo tee /etc/apt/sources.list.d/github-cli.list >/dev/null
+fi
+
+sudo apt update
+sudo apt install --yes --no-install-recommends \
+{{- range .packages.ubuntu.apt }}
+  {{ . | quote }} \
+{{- end }}
+
+{{ range .packages.ubuntu.snaps -}}
+snap list {{ .name | quote }} >/dev/null 2>&1 || sudo snap install {{ .name | quote }}
+{{- if hasKey . "channel" }} --channel={{ .channel }}{{ end }}
+{{- if and (hasKey . "classic") .classic }} --classic{{ end }}
+{{ end -}}
+{{ end -}}
