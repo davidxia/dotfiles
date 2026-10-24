@@ -9,7 +9,6 @@ packages:
     - jq
     - kubernetes-cli
     - pinentry-mac
-    - pinentry-touchid
     - speedtest-cli
     - starship
     - tree
@@ -17,7 +16,7 @@ packages:
     - wget
     casks:
     - google-chrome
-    - google-cloud-sdk
+    - gcloud-cli
   ubuntu:
     apt:
     - curl
