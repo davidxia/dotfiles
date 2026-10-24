@@ -1,5 +1,6 @@
 {{ if eq .osid "linux-ubuntu" -}}
 #!/bin/bash
+set -euo pipefail
 
 sudo apt update
 
@@ -11,24 +12,5 @@ sudo apt install --yes --no-install-recommends {{ . | quote }}
 {{ range $packages -}}
 sudo snap install {{ . | quote }} --{{ $channel }}
 {{ end -}}
-{{ end }}
-
-{{ if has "fish" .packages.ubuntu.apt -}}
-sudo chsh -s $(which fish) $(whoami)
 {{ end -}}
-
-{{ if has "starship" .packages.ubuntu.snaps.edge -}}
-grep -q "starship init bash" ~/.bashrc || echo 'eval "$(starship init bash)"' >> ~/.bashrc
-
-{{ if has "fish" .packages.ubuntu.apt -}}
-grep -q "starship init fish" ~/.config/fish/config.fish || echo 'starship init fish | source' >> ~/.config/fish/config.fish
-{{ end -}}
-{{ end -}}
-
-curl -LsSf https://astral.sh/uv/install.sh | sh
-grep -q "uv generate-shell-completion bash" ~/.bashrc || echo 'eval "$(uv generate-shell-completion bash)"' >> ~/.bashrc
-{{ if has "fish" .packages.ubuntu.apt -}}
-mkdir -p ~/.config/fish/completions && echo 'uv generate-shell-completion fish | source' > ~/.config/fish/completions/uv.fish
-{{ end -}}
-
 {{ end -}}
