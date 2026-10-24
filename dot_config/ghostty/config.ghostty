@@ -9,4 +9,4 @@ theme = light:Solarized Light Readable,dark:Solarized Dark Readable
 minimum-contrast = 3
 # Dim text (e.g. Claude Code's secondary text) defaults to 50% opacity, which
 # is hard to read on Solarized backgrounds.
-faint-opacity = 0.8
+faint-opacity = 0.9
