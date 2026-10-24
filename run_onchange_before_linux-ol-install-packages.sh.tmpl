@@ -1,0 +1,30 @@
+{{ if eq .osid "linux-ol" -}}
+{{ $major := .chezmoi.osRelease.versionID | splitList "." | first -}}
+#!/bin/bash
+set -euo pipefail
+
+sudo dnf install --assumeyes oracle-epel-release-el{{ $major }} 'dnf-command(config-manager)'
+# EPEL packages depend on CodeReady Builder (e.g. httpie needs python3-pygments).
+sudo dnf config-manager --set-enabled ol{{ $major }}_developer_EPEL ol{{ $major }}_codeready_builder
+
+# GitHub CLI rpm repo: https://github.com/cli/cli/blob/trunk/docs/install_linux.md
+if [ ! -f /etc/yum.repos.d/gh-cli.repo ]; then
+  sudo dnf config-manager --add-repo https://cli.github.com/packages/rpm/gh-cli.repo
+fi
+
+sudo dnf install --assumeyes \
+{{- range .packages.ol.dnf }}
+  {{ . | quote }} \
+{{- end }}
+
+# Classic snaps need /snap, and snapd's socket must be running.
+sudo systemctl enable --now snapd.socket
+[ -e /snap ] || sudo ln -s /var/lib/snapd/snap /snap
+sudo snap wait system seed.loaded
+
+{{ range .packages.ol.snaps -}}
+snap list {{ .name | quote }} >/dev/null 2>&1 || sudo snap install {{ .name | quote }}
+{{- if hasKey . "channel" }} --channel={{ .channel }}{{ end }}
+{{- if and (hasKey . "classic") .classic }} --classic{{ end }}
+{{ end -}}
+{{ end -}}

@@ -4,7 +4,10 @@
 {{- end -}}
 
 {{- $workemail := promptStringOnce . "workemail" "Work email" -}}
-
+gitHub:
+  # Cache GitHub API lookups for .chezmoiexternal.toml.tmpl so every chezmoi
+  # command doesn't spend anonymous API rate limit.
+  refreshPeriod: 12h
 
 data:
   email: david@davidxia.com
