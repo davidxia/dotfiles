@@ -1,0 +1,28 @@
+{{ if eq .chezmoi.os "darwin" -}}
+#!/bin/bash
+# One-time shell setup. Every step is guarded so re-running is a no-op.
+set -euo pipefail
+
+{{ if has "fish" .packages.darwin.brews -}}
+fish_path="$(brew --prefix)/bin/fish"
+if [ "$(dscl . -read ~/ UserShell | awk '{print $2}')" != "$fish_path" ]; then
+  grep -qxF "$fish_path" /etc/shells || echo "$fish_path" | sudo tee -a /etc/shells >/dev/null
+  chsh -s "$fish_path"
+fi
+
+# https://github.com/oh-my-fish/oh-my-fish
+if [ ! -d ~/.local/share/omf ]; then
+  omf_installer="$(mktemp)"
+  curl -fsSL https://raw.githubusercontent.com/oh-my-fish/oh-my-fish/master/bin/install -o "$omf_installer"
+  fish "$omf_installer" --noninteractive
+  rm -f "$omf_installer"
+fi
+for pkg in bass google-cloud-sdk-fish-completion; do
+  [ -d ~/.local/share/omf/pkg/"$pkg" ] || fish -c "omf install $pkg"
+done
+{{ end -}}
+
+{{ if has "starship" .packages.darwin.brews -}}
+grep -qs "starship init bash" ~/.bashrc || echo 'eval "$(starship init bash)"' >> ~/.bashrc
+{{ end -}}
+{{ end -}}
