@@ -26,13 +26,12 @@ chezmoi apply -v
 
 * create `~/src/github.com` dir
 * [install uv] for macOS
-* install Monaco nerdfont for macOS
-* try to export and load iTerm2 profile
 * [install gh] for Linux?
 * install IDEs like VS Code
 * yubikey and gpg config for macOS
 * [install goenv] and use `source (goenv init - | psub)` in `~/.config/fish/config.fish`
-* see <https://natelandau.com/managing-dotfiles-with-chezmoi/>
+
+see <https://natelandau.com/managing-dotfiles-with-chezmoi/>
 
 [chezmoi]: https://www.chezmoi.io/
 [install uv]: https://docs.astral.sh/uv/getting-started/installation/
