@@ -1,0 +1,3 @@
+# Install Ghostty's terminfo on SSH hosts that lack it, so programs like less
+# don't warn that the terminal is not fully functional.
+shell-integration-features = ssh-terminfo
