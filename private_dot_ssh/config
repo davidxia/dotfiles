@@ -1,7 +1,0 @@
-# Machine-specific hosts live in an untracked file.
-Include ~/.ssh/config.local
-
-Host *
-    ControlPath ~/.ssh/cm/%r@%n:%p
-    ControlMaster auto
-    ControlPersist 1h

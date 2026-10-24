@@ -1,0 +1,3 @@
+gpg:
+  # Primary key. Its subkeys live on a YubiKey.
+  fingerprint: 13B7FE7F06B378360C07C86A34469DFBDC90312C

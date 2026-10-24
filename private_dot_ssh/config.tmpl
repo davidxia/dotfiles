@@ -1,0 +1,13 @@
+# Machine-specific hosts live in an untracked file.
+Include ~/.ssh/config.local
+
+Host *
+    ControlPath ~/.ssh/cm/%r@%n:%p
+    ControlMaster auto
+    ControlPersist 1h
+{{- if eq .chezmoi.os "darwin" }}
+    # Use gpg-agent (YubiKey) even when ssh isn't started from a shell that
+    # sets SSH_AUTH_SOCK. Hosts that forward the agent should also use
+    # `ForwardAgent ~/.gnupg/S.gpg-agent.ssh`.
+    IdentityAgent ~/.gnupg/S.gpg-agent.ssh
+{{- end }}

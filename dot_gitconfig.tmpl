@@ -1,7 +1,7 @@
 [user]
 	name = David Xia
 	email = {{ .email }}
-	signingkey = 0x34469DFBDC90312C
+	signingkey = {{ .gpg.fingerprint }}
 
 [core]
 	editor = {{ .editor }}
@@ -30,7 +30,7 @@
 	autoSetupMerge = simple
 
 [commit]
-	gpgsign = {{ if eq .chezmoi.os "darwin" }}true{{ else }}false{{ end }}
+	gpgsign = true
 
 [difftool "difftastic"]
 	# See `man git-difftool` for a description of MERGED, LOCAL and REMOTE.
@@ -46,7 +46,7 @@
 	tool = difftastic
 
 [tag]
-	gpgsign = {{ if eq .chezmoi.os "darwin" }}true{{ else }}false{{ end }}
+	gpgsign = true
 
 [pull]
 	rebase = true
