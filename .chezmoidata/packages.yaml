@@ -1,8 +1,8 @@
 packages:
   darwin:
-    taps:
-    - jorgelbg/tap
     # Formulae from third-party taps, which Homebrew must be told to trust.
+    # Installing by full name taps them; an explicit `tap` line fails for
+    # jorgelbg/tap because its formula has no Linux URL.
     trusted_brews:
     - jorgelbg/tap/pinentry-touchid
     brews:
