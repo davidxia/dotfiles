@@ -1,0 +1,12 @@
+{{ if eq .chezmoi.os "darwin" -}}
+#!/bin/bash
+# Setup steps from https://github.com/jorgelbg/pinentry-touchid. All are safe
+# to repeat.
+set -euo pipefail
+
+# Make `pinentry` resolve to pinentry-mac, which pinentry-touchid falls back to.
+"$(brew --prefix)/opt/pinentry-touchid/bin/pinentry-touchid" -fix
+# pinentry-touchid stores the PIN itself; stop pinentry-mac offering to as well.
+defaults write org.gpgtools.common DisableKeychain -bool yes
+gpg-connect-agent reloadagent /bye >/dev/null
+{{ end -}}
