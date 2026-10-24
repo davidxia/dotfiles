@@ -1,6 +1,7 @@
 packages:
   darwin:
     brews:
+    - difftastic
     - git
     - fish
     - gh
@@ -21,6 +22,7 @@ packages:
     apt:
     - curl
     - fish
+    - gh
     - git
     - gnupg
     - grep

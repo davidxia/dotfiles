@@ -11,8 +11,8 @@ if status --is-interactive
   set -x GPG_TTY (tty)
 {{- if eq .chezmoi.os "darwin" }}
   set -x SSH_AUTH_SOCK (gpgconf --list-dirs agent-ssh-socket)
-{{- end }}
   gpgconf --launch gpg-agent
+{{- end }}
 {{- if eq .chezmoi.os "linux" }}
 
   # Keep a fixed symlink so tmux panes always find the current SSH agent.

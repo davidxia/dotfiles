@@ -10,7 +10,7 @@ esac
 [ -f "$HOME/.cargo/env" ] && . "$HOME/.cargo/env"
 [ -f "$HOME/.local/bin/env" ] && . "$HOME/.local/bin/env"
 
-[[ $- == *i* ]] || return
+[[ $- == *i* ]] || return 0
 
 {{ if eq .chezmoi.os "linux" -}}
 # Switch to fish when it's installed but isn't the login shell.
@@ -20,5 +20,9 @@ if [ -n "$fish_path" ] && [ "$(getent passwd "$(id -un)" | cut -d: -f7)" != "$fi
 fi
 
 {{ end -}}
-command -v starship >/dev/null && eval "$(starship init bash)"
-command -v uv >/dev/null && eval "$(uv generate-shell-completion bash)"
+if command -v starship >/dev/null; then
+  eval "$(starship init bash)"
+fi
+if command -v uv >/dev/null; then
+  eval "$(uv generate-shell-completion bash)"
+fi

@@ -1,7 +1,7 @@
 [user]
 	name = David Xia
 	email = {{ .email }}
-	signingkey = DC90312C
+	signingkey = 0x34469DFBDC90312C
 
 [core]
 	editor = {{ .editor }}
@@ -23,6 +23,7 @@
 	dlog = -c diff.external='difft --background=light' log --ext-diff
 	dshow = -c diff.external='difft --background=light' show --ext-diff
 	ddiff = -c diff.external='difft --background=light' diff
+	cs = commit --signoff
 
 [branch]
 	autosetuprebase = always
@@ -42,7 +43,6 @@
 	difftool = true
 
 [diff]
-	external = difft
 	tool = difftastic
 
 [tag]
@@ -62,9 +62,6 @@
 [gpg]
 	program = gpg
 
-[gpg "ssh"]
-    allowedSignersFile = /Users/dxia/.ssh/allowed_signers
-
 [fetch]
 	prune = true
 
@@ -76,9 +73,6 @@
 
 [includeIf "gitdir:~/src/github.com/modal-labs/"]
 	path = ~/.gitconfig_work
-
-[alias]
-	cs = commit --signoff
 
 [credential "https://github.com"]
 	helper =

@@ -1,0 +1,18 @@
+{{ if eq .chezmoi.os "darwin" -}}
+case ":$PATH:" in
+  *:"$HOME/.docker/bin":*) ;;
+  *) [ -d "$HOME/.docker/bin" ] && export PATH="$PATH:$HOME/.docker/bin" ;;
+esac
+
+{{ end -}}
+[ -f "$HOME/.cargo/env" ] && . "$HOME/.cargo/env"
+[ -f "$HOME/.local/bin/env" ] && . "$HOME/.local/bin/env"
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
+
+# Bash login shells read this file instead of ~/.bashrc when there's no
+# ~/.bash_profile.
+if [ -n "${BASH_VERSION:-}" ] && [ -f "$HOME/.bashrc" ]; then
+  . "$HOME/.bashrc"
+fi

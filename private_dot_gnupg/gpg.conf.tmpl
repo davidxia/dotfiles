@@ -68,3 +68,8 @@ throw-keyids
 #list-options show-unusable-subkeys
 # Verbose output
 #verbose
+{{- if eq .chezmoi.os "linux" }}
+# Don't start a local agent; it would take the socket path that SSH
+# RemoteForward uses to forward the workstation's agent.
+no-autostart
+{{- end }}
