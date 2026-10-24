@@ -1,0 +1,2 @@
+# Files to delete from machines because the repo no longer manages them.
+.config/fish/themes/my.theme

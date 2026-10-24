@@ -1,4 +1,6 @@
-fish_config theme choose my
+# fish 4's solarized theme has light and dark variants and switches with the
+# terminal's color theme.
+fish_config theme choose solarized
 
 {{ if eq .chezmoi.os "darwin" -}}
 if test -d $HOME/.docker/bin
@@ -27,6 +29,15 @@ if status --is-interactive
     set -x SSH_AUTH_SOCK $fixed_sock
   end
 {{- end }}
+
+  # difftastic reads DFT_BACKGROUND. Keep it matching the terminal's theme, and
+  # assume light until the terminal reports one.
+  set -q DFT_BACKGROUND; or set -gx DFT_BACKGROUND light
+  function __sync_dft_background --on-variable fish_terminal_color_theme
+    if contains -- "$fish_terminal_color_theme" light dark
+      set -gx DFT_BACKGROUND $fish_terminal_color_theme
+    end
+  end
 
   if test -f $HOME/.local/bin/env.fish
     source $HOME/.local/bin/env.fish
