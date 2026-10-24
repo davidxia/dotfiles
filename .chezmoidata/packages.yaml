@@ -1,5 +1,10 @@
 packages:
   darwin:
+    taps:
+    - jorgelbg/tap
+    # Formulae from third-party taps, which Homebrew must be told to trust.
+    trusted_brews:
+    - jorgelbg/tap/pinentry-touchid
     brews:
     - chezmoi
     - difftastic
