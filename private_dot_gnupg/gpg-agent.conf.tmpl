@@ -2,8 +2,6 @@
 enable-ssh-support
 default-cache-ttl 600
 max-cache-ttl 7200
-# Reads the YubiKey PIN from the macOS Keychain after a Touch ID check, and
-# falls back to pinentry-mac to ask for it.
-pinentry-program /opt/homebrew/opt/pinentry-touchid/bin/pinentry-touchid
+pinentry-program /opt/homebrew/bin/pinentry-mac
 debug-level basic
 {{ end -}}
