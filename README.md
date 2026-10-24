@@ -53,12 +53,6 @@ These aren't in the repo:
   `RemoteForward /run/user/<uid>/gnupg/S.gpg-agent ~/.gnupg/S.gpg-agent.extra`.
 * `~/.ssh/yubikey.pub`: the YubiKey's SSH public key, from
   `gpg --export-ssh-key <authentication subkey>`.
-* A second alias for VS Code Remote-SSH, e.g. `Host modal-dev-ssm-vscode`, with
-  the same settings but without the gpg-agent `RemoteForward`. Remote-SSH can
-  open its own connections, and when one that forwards gpg-agent closes, it
-  removes the socket the other sessions use for signing. Without the
-  `RemoteForward`, VS Code sessions sign through the socket of a regular
-  `ssh` session.
 
 ## TODO
 
