@@ -2,6 +2,6 @@
 Include ~/.ssh/config.local
 
 Host *
-    ControlPath ~/.ssh/controlmasters/%r@%h:%p
+    ControlPath ~/.ssh/cm/%r@%n:%p
     ControlMaster auto
     ControlPersist 1h
