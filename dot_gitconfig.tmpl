@@ -20,9 +20,9 @@
 	hist = log --pretty=format:'%C(yellow)%h %Cred%ad %Cblue%an%Cgreen%d %Creset%s' --date=short
 	ctags = !.git/hooks/ctags
 	# Difftastic aliases, so `git dlog` is `git log` with difftastic and so on.
-	dlog = -c diff.external='difft --background=light' log --ext-diff
-	dshow = -c diff.external='difft --background=light' show --ext-diff
-	ddiff = -c diff.external='difft --background=light' diff
+	dlog = -c diff.external=difft log --ext-diff
+	dshow = -c diff.external=difft show --ext-diff
+	ddiff = -c diff.external=difft diff
 	cs = commit --signoff
 
 [branch]
