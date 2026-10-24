@@ -7,3 +7,6 @@ theme = light:Solarized Light Readable,dark:Solarized Dark Readable
 # Darken or lighten any color too close to the background, such as Solarized
 # yellow and cyan on the light background.
 minimum-contrast = 3
+# Dim text (e.g. Claude Code's secondary text) defaults to 50% opacity, which
+# is hard to read on Solarized backgrounds.
+faint-opacity = 0.8
