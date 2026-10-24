@@ -4,10 +4,6 @@ set -euo pipefail
 
 brew bundle install --no-upgrade --file=/dev/stdin <<EOF
 
-{{ range .packages.darwin.trusted_brews -}}
-brew {{ . | quote }}, trusted: true
-{{ end -}}
-
 {{ range .packages.darwin.brews -}}
 brew {{ . | quote }}
 {{ end -}}
