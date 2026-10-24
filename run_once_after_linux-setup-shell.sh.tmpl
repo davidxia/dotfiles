@@ -10,14 +10,9 @@ if [ "$(getent passwd "$(whoami)" | cut -d: -f7)" != "$fish_path" ]; then
 fi
 {{ end -}}
 
-{{ if has "starship" .packages.ubuntu.snaps.edge -}}
-grep -qs "starship init bash" ~/.bashrc || echo 'eval "$(starship init bash)"' >> ~/.bashrc
-{{ end -}}
-
 if ! command -v uv >/dev/null && [ ! -x ~/.local/bin/uv ]; then
   curl -LsSf https://astral.sh/uv/install.sh | sh
 fi
-grep -qs "uv generate-shell-completion bash" ~/.bashrc || echo 'eval "$(uv generate-shell-completion bash)"' >> ~/.bashrc
 {{ if has "fish" .packages.ubuntu.apt -}}
 mkdir -p ~/.config/fish/completions && echo 'uv generate-shell-completion fish | source' > ~/.config/fish/completions/uv.fish
 {{ end -}}

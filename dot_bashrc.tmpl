@@ -1,0 +1,24 @@
+{{ if eq .chezmoi.os "linux" -}}
+# snapd only adds its bin dir for login shells. Non-interactive commands run
+# over SSH (`ssh host chezmoi ...`) still source this file.
+case ":$PATH:" in
+  *:/var/lib/snapd/snap/bin:*) ;;
+  *) [ -d /var/lib/snapd/snap/bin ] && export PATH="$PATH:/var/lib/snapd/snap/bin" ;;
+esac
+
+{{ end -}}
+[ -f "$HOME/.cargo/env" ] && . "$HOME/.cargo/env"
+[ -f "$HOME/.local/bin/env" ] && . "$HOME/.local/bin/env"
+
+[[ $- == *i* ]] || return
+
+{{ if eq .chezmoi.os "linux" -}}
+# Switch to fish when it's installed but isn't the login shell.
+fish_path="$(command -v fish)"
+if [ -n "$fish_path" ] && [ "$(getent passwd "$(id -un)" | cut -d: -f7)" != "$fish_path" ]; then
+  SHELL="$fish_path" exec fish
+fi
+
+{{ end -}}
+command -v starship >/dev/null && eval "$(starship init bash)"
+command -v uv >/dev/null && eval "$(uv generate-shell-completion bash)"
