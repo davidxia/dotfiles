@@ -1,3 +1,6 @@
+# Machine-specific hosts live in an untracked file.
+Include ~/.ssh/config.local
+
 Host *
     ControlPath ~/.ssh/controlmasters/%r@%h:%p
     ControlMaster auto
