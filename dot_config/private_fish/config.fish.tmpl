@@ -1,0 +1,59 @@
+fish_config theme choose my
+
+{{ if eq .chezmoi.os "darwin" -}}
+if test -d $HOME/.docker/bin
+  fish_add_path --append $HOME/.docker/bin
+end
+
+{{ end -}}
+# needed to use gpg-agent for SSH
+if status --is-interactive
+  set -x GPG_TTY (tty)
+{{- if eq .chezmoi.os "darwin" }}
+  set -x SSH_AUTH_SOCK (gpgconf --list-dirs agent-ssh-socket)
+{{- end }}
+  gpgconf --launch gpg-agent
+{{- if eq .chezmoi.os "linux" }}
+
+  # Keep a fixed symlink so tmux panes always find the current SSH agent.
+  # On each new SSH connection, SSH_AUTH_SOCK points to a fresh socket path;
+  # we update the symlink and then always export the fixed path so existing
+  # tmux windows (which already have the symlink path set) pick it up too.
+  set -l fixed_sock $HOME/.ssh/ssh_auth_sock
+  if set -q SSH_AUTH_SOCK; and test "$SSH_AUTH_SOCK" != "$fixed_sock"
+    ln -sf $SSH_AUTH_SOCK $fixed_sock
+  end
+  if test -L $fixed_sock
+    set -x SSH_AUTH_SOCK $fixed_sock
+  end
+{{- end }}
+
+  if test -f $HOME/.local/bin/env.fish
+    source $HOME/.local/bin/env.fish
+  end
+
+  if type -q starship
+    starship init fish | source
+  end
+
+  if test -d $HOME/.goenv
+    set -x GOENV_ROOT $HOME/.goenv; set -x PATH $GOENV_ROOT $PATH; source (goenv init - | psub)
+  end
+
+  if test -f $HOME/.cargo/env.fish
+    source $HOME/.cargo/env.fish
+  end
+
+  if functions -q load_nvm
+    load_nvm > /dev/stderr
+  end
+end
+
+# The next line updates PATH for the Google Cloud SDK.
+if test -f $HOME/google-cloud-sdk/path.fish.inc
+  source $HOME/google-cloud-sdk/path.fish.inc
+end
+
+if type -q direnv
+  direnv hook fish | source
+end
