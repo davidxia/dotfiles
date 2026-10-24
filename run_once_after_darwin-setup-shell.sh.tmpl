@@ -17,8 +17,20 @@ if [ ! -d ~/.local/share/omf ]; then
   fish "$omf_installer" --noninteractive
   rm -f "$omf_installer"
 fi
-for pkg in bass google-cloud-sdk-fish-completion; do
-  [ -d ~/.local/share/omf/pkg/"$pkg" ] || fish -c "omf install $pkg"
+# Each entry is <package dir name>=<omf registry name or git URL>.
+# omf install exits 0 even on failure, so check the package dir afterwards.
+for entry in \
+  bass=bass \
+  google-cloud-sdk-fish-completion=https://github.com/lgathy/google-cloud-sdk-fish-completion; do
+  pkg="${entry%%=*}"
+  src="${entry#*=}"
+  if [ ! -d ~/.local/share/omf/pkg/"$pkg" ]; then
+    fish -c "omf install $src"
+    if [ ! -d ~/.local/share/omf/pkg/"$pkg" ]; then
+      echo "omf install $src failed" >&2
+      exit 1
+    fi
+  fi
 done
 {{ end -}}
 
