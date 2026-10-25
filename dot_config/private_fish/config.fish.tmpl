@@ -32,7 +32,11 @@ end
 if status --is-interactive
   set -x GPG_TTY (tty)
 {{- if eq .chezmoi.os "darwin" }}
+{{-   if lookPath "gpgconf" }}
+  set -x SSH_AUTH_SOCK {{ output "gpgconf" "--list-dirs" "agent-ssh-socket" | trim | quote }}
+{{-   else }}
   set -x SSH_AUTH_SOCK (gpgconf --list-dirs agent-ssh-socket)
+{{-   end }}
   # Connecting starts gpg-agent if it isn't running.
   gpg-connect-agent --quiet /bye >/dev/null
 {{- end }}
@@ -62,6 +66,11 @@ if status --is-interactive
 
   if type -q starship
     starship init fish | source
+{{- if not (include "dot_config/starship.toml" | contains "right_format") }}
+    # starship.toml sets no right_format, so don't run starship again on every
+    # prompt just to draw an empty right prompt.
+    functions --erase fish_right_prompt
+{{- end }}
   end
 end
 

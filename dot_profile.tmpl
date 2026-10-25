@@ -1,8 +1,33 @@
 [ -f "$HOME/.config/shell/env.sh" ] && . "$HOME/.config/shell/env.sh"
 
-# Sourcing nvm.sh is slow, so only login shells put nvm's default Node on PATH.
+# Only login shells put nvm's default Node on PATH. Sourcing nvm.sh takes 100 to
+# 200 ms, so when the default is an exact, installed version, set up its PATH,
+# NVM_BIN, and NVM_INC directly and load nvm.sh the first time nvm runs.
 export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
+if [ -s "$NVM_DIR/nvm.sh" ]; then
+  _nvm_default=
+  [ -f "$NVM_DIR/alias/default" ] && read -r _nvm_default <"$NVM_DIR/alias/default"
+  case $_nvm_default in
+    [0-9]*) _nvm_default="v$_nvm_default" ;;
+  esac
+  case $_nvm_default in
+    v[0-9]*.[0-9]*.[0-9]*) _nvm_exact=$_nvm_default ;;
+    *) _nvm_exact= ;;
+  esac
+  if [ -n "$_nvm_exact" ] && [ -d "$NVM_DIR/versions/node/$_nvm_exact/bin" ]; then
+    export NVM_BIN="$NVM_DIR/versions/node/$_nvm_exact/bin"
+    export NVM_INC="$NVM_DIR/versions/node/$_nvm_exact/include/node"
+    export PATH="$NVM_BIN:$PATH"
+    nvm() {
+      unset -f nvm
+      . "$NVM_DIR/nvm.sh" --no-use
+      nvm "$@"
+    }
+  else
+    . "$NVM_DIR/nvm.sh"
+  fi
+  unset _nvm_default _nvm_exact
+fi
 
 # Bash login shells reach this file through ~/.bash_profile and don't read
 # ~/.bashrc on their own. Keep this last: on Linux, ~/.bashrc execs fish in
