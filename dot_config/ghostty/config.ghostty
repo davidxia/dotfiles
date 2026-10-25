@@ -4,8 +4,8 @@ shell-integration-features = ssh-terminfo
 
 # Solarized, following macOS light/dark appearance.
 theme = light:Solarized Light Readable,dark:Solarized Dark Readable
-# Darken or lighten any color too close to the background, such as Solarized
-# yellow and cyan on the light background.
+# Replace any color too close to the background with black or white. The
+# Readable themes keep their palette above this ratio so colors survive.
 minimum-contrast = 3
 # Dim text (e.g. Claude Code's secondary text) defaults to 50% opacity, which
 # is hard to read on Solarized backgrounds.
