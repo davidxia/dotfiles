@@ -17,7 +17,7 @@
 	co = checkout
 	com = commit
 	br = branch
-	hist = log --pretty=format:'%C(yellow)%h %Cred%ad %Cblue%an%Cgreen%d %Creset%s' --date=short
+	hist = log --pretty=format:'%C(yellow)%h %Cred%ad %Cblue%an%Cgreen%d %Creset%s' --date=short --color=always
 	ctags = !.git/hooks/ctags
 	# Difftastic aliases, so `git dlog` is `git log` with difftastic and so on.
 	dlog = -c diff.external=difft log --ext-diff
