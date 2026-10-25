@@ -1,0 +1,29 @@
+{{- /*
+Lists tools in .packages.tools that no installer covers on a platform, and
+GitHub downloads with no release asset for an architecture. Run with
+  chezmoi execute-template '{{ template "package-gaps" . }}'
+*/ -}}
+{{- $data := . -}}
+{{- range $platform := list "darwin" "ubuntu" "ol" -}}
+{{-   $covered := list -}}
+{{-   range $installer := list "brew" "apt" "dnf" "snap" "github" -}}
+{{-     $names := includeTemplate ".chezmoitemplates/tools-for" (dict "data" $data "platform" $platform "installer" $installer) | splitList "\n" | compact -}}
+{{-     $covered = concat $covered $names -}}
+{{-   end -}}
+{{-   $missing := list -}}
+{{-   range $name, $tool := $data.packages.tools -}}
+{{-     if and (or (not (hasKey $tool "only")) (has $platform $tool.only)) (not (has $name $covered)) -}}
+{{-       $missing = append $missing $name -}}
+{{-     end -}}
+{{-   end }}
+{{ $platform }}: {{ if $missing }}{{ $missing | join " " }}{{ else }}(none){{ end }}
+{{- end }}
+{{- range $arch := list "amd64" "arm64" -}}
+{{-   $missing := list -}}
+{{-   range $name, $tool := $data.packages.tools -}}
+{{-     if and (hasKey $tool "github") (not (hasKey $tool.github.assets $arch)) -}}
+{{-       $missing = append $missing $name -}}
+{{-     end -}}
+{{-   end }}
+GitHub downloads without a linux/{{ $arch }} asset: {{ if $missing }}{{ $missing | join " " }}{{ else }}(none){{ end }}
+{{- end }}

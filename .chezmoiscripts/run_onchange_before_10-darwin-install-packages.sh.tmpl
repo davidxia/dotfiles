@@ -4,11 +4,11 @@ set -euo pipefail
 
 brew bundle install --no-upgrade --file=/dev/stdin <<EOF
 
-{{ range .packages.darwin.brews -}}
-brew {{ . | quote }}
+{{ range includeTemplate ".chezmoitemplates/tools-for" (dict "data" . "platform" "darwin" "installer" "brew") | splitList "\n" | compact -}}
+brew {{ (index $.packages.tools .).brew | quote }}
 {{ end -}}
 
-{{ range .packages.darwin.casks -}}
+{{ range .packages.casks -}}
 cask {{ . | quote }}
 {{ end -}}
 

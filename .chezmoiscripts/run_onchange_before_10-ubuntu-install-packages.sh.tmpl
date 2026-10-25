@@ -19,13 +19,15 @@ fi
 
 sudo apt update
 sudo apt install --yes --no-install-recommends \
-{{- range .packages.ubuntu.apt }}
-  {{ . | quote }} \
+{{- range includeTemplate ".chezmoitemplates/tools-for" (dict "data" . "platform" "ubuntu" "installer" "apt") | splitList "\n" | compact }}
+  {{ (index $.packages.tools .).apt | quote }} \
 {{- end }}
 
-{{ range .packages.ubuntu.snaps -}}
+{{ range includeTemplate ".chezmoitemplates/tools-for" (dict "data" . "platform" "ubuntu" "installer" "snap") | splitList "\n" | compact -}}
+{{ with (index $.packages.tools .).snap -}}
 snap list {{ .name | quote }} >/dev/null 2>&1 || sudo snap install {{ .name | quote }}
 {{- if hasKey . "channel" }} --channel={{ .channel }}{{ end }}
 {{- if and (hasKey . "classic") .classic }} --classic{{ end }}
+{{ end -}}
 {{ end -}}
 {{ end -}}

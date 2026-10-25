@@ -1,0 +1,30 @@
+{{- /*
+Prints the names of the tools in .packages.tools that one installer installs on
+one platform, one per line. Call with
+  includeTemplate ".chezmoitemplates/tools-for" (dict "data" . "platform" "ubuntu" "installer" "apt")
+where platform is darwin, ubuntu, or ol, and installer is brew, apt, dnf, snap,
+or github. A tool comes from the platform's own package manager when it has a
+package there, otherwise from snap on Linux, otherwise from its GitHub release
+on Linux. A GitHub release with `always` is installed on Linux regardless.
+*/ -}}
+{{- $platform := .platform -}}
+{{- $installer := .installer -}}
+{{- $native := get (dict "darwin" "brew" "ubuntu" "apt" "ol" "dnf") $platform -}}
+{{- $linux := ne $platform "darwin" -}}
+{{- range $name, $tool := .data.packages.tools -}}
+{{-   if or (not (hasKey $tool "only")) (has $platform $tool.only) -}}
+{{-     $hasNative := hasKey $tool $native -}}
+{{-     $hasSnap := hasKey $tool "snap" -}}
+{{-     $match := false -}}
+{{-     if eq $installer $native -}}
+{{-       $match = $hasNative -}}
+{{-     else if eq $installer "snap" -}}
+{{-       $match = and $linux $hasSnap (not $hasNative) -}}
+{{-     else if and (eq $installer "github") $linux (hasKey $tool "github") -}}
+{{-       $match = or (get $tool.github "always") (and (not $hasNative) (not $hasSnap)) -}}
+{{-     end -}}
+{{-     if $match }}
+{{ $name }}
+{{-     end -}}
+{{-   end -}}
+{{- end -}}

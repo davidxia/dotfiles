@@ -23,36 +23,24 @@
     type = "file"
     url = "https://raw.githubusercontent.com/edc/bass/{{ $bass }}/functions/__bass.py"
 
-{{/* Linux tools that aren't packaged for the distro. Each tracks the latest
-     GitHub release; chezmoi re-checks at most once per refreshPeriod. */ -}}
-{{ if and (eq .chezmoi.os "linux") (eq .chezmoi.arch "amd64") -}}
-[".local/bin/fish"]
-    type = "archive-file"
-    url = {{ gitHubLatestReleaseAssetURL "fish-shell/fish-shell" "fish-*-linux-x86_64.tar.xz" | quote }}
-    path = "fish"
+{{/* Linux tools that .packages.tools downloads from their latest GitHub
+     release. chezmoi re-checks at most once per refreshPeriod. */ -}}
+{{ if eq .chezmoi.os "linux" -}}
+{{   range $name := includeTemplate ".chezmoitemplates/tools-for" (dict "data" . "platform" (trimPrefix "linux-" .osid) "installer" "github") | splitList "\n" | compact -}}
+{{     $gh := (index $.packages.tools $name).github -}}
+{{     $asset := get $gh.assets $.chezmoi.arch -}}
+{{     if $asset }}
+[{{ printf ".local/bin/%s" (get $gh "bin" | default $name) | quote }}]
+    type = {{ if hasKey $gh "path" }}"archive-file"{{ else }}"file"{{ end }}
+    url = {{ gitHubLatestReleaseAssetURL $gh.repo $asset | quote }}
+{{-      if hasKey $gh "path" }}
+    path = {{ $gh.path | quote }}
+{{-      end }}
+{{-      if hasKey $gh "stripComponents" }}
+    stripComponents = {{ $gh.stripComponents }}
+{{-      end }}
     executable = true
     refreshPeriod = "168h"
-
-[".local/bin/dust"]
-    type = "archive-file"
-    url = {{ gitHubLatestReleaseAssetURL "bootandy/dust" "dust-*-x86_64-unknown-linux-musl.tar.gz" | quote }}
-    path = "dust"
-    stripComponents = 1
-    executable = true
-    refreshPeriod = "168h"
-{{- if eq .osid "linux-ubuntu" }}
-
-[".local/bin/difft"]
-    type = "archive-file"
-    url = {{ gitHubLatestReleaseAssetURL "Wilfred/difftastic" "difft-*-x86_64-unknown-linux-musl.tar.gz" | quote }}
-    path = "difft"
-    executable = true
-    refreshPeriod = "168h"
-
-[".local/bin/yq"]
-    type = "file"
-    url = {{ gitHubLatestReleaseAssetURL "mikefarah/yq" "yq_linux_amd64" | quote }}
-    executable = true
-    refreshPeriod = "168h"
-{{- end }}
+{{     end -}}
+{{   end -}}
 {{ end -}}

@@ -1,75 +1,128 @@
+# Command-line tools for every machine. Each tool lists its package name for
+# each installer that has it:
+#   - macOS: brew
+#   - Ubuntu: apt, then snap
+#   - Oracle Linux: dnf, then snap
+# On Linux, a tool with no apt or dnf package for the distro and no snap is
+# downloaded from its latest GitHub release (`github`) into ~/.local/bin.
+# `only` limits a tool to some platforms (darwin, ubuntu, ol).
+#
+# List tools that a platform can't install with:
+#   chezmoi execute-template '{{ template "package-gaps" . }}'
 packages:
-  darwin:
-    brews:
-    - chezmoi
-    - difftastic
-    - dust
-    - fish
-    - gh
-    - git
-    - gnupg
-    - grep
-    - httpie
-    - jq
-    - kubernetes-cli
-    - pinentry-mac
-    - speedtest-cli
-    - starship
-    - subnetcalc
-    - tree
-    - watch
-    - wget
-    - yq
-    casks:
-    - dropbox
-    - flux-app
-    - gcloud-cli
-    - ghostty
-    - gitify
-    - google-chrome
-    - rectangle
-    - visual-studio-code
-  ubuntu:
-    # gh comes from GitHub's apt repo, which the install script adds.
-    apt:
-    - curl
-    - fish
-    - gh
-    - git
-    - gnupg
-    - grep
-    - httpie
-    - jq
-    - procps
-    - snapd
-    - speedtest-cli
-    - subnetcalc
-    - tree
-    - wget
-    snaps:
-    - name: chezmoi
-      classic: true
-    - name: starship
-      channel: edge
-  ol:
-    # Most of these come from EPEL. gh comes from GitHub's repo, which the
-    # install script adds.
-    dnf:
-    - difftastic
-    - fish
-    - gh
-    - git
-    - gnupg2
-    - grep
-    - httpie
-    - ipcalc
-    - jq
-    - procps-ng
-    - snapd
-    - speedtest-cli
-    - tree
-    - wget
-    - yq
-    snaps:
-    - name: chezmoi
-      classic: true
+  tools:
+    chezmoi:
+      brew: chezmoi
+      snap: {name: chezmoi, classic: true}
+    # The Ubuntu install script needs curl to add GitHub CLI's apt repo. macOS
+    # and Oracle Linux ship it.
+    curl:
+      apt: curl
+      only: [ubuntu]
+    difftastic:
+      brew: difftastic
+      dnf: difftastic
+      github:
+        repo: Wilfred/difftastic
+        bin: difft
+        assets: {amd64: difft-*-x86_64-unknown-linux-musl.tar.gz}
+        path: difft
+    dust:
+      brew: dust
+      github:
+        repo: bootandy/dust
+        assets: {amd64: dust-*-x86_64-unknown-linux-musl.tar.gz}
+        path: dust
+        stripComponents: 1
+    fish:
+      brew: fish
+      apt: fish
+      dnf: fish
+      # Distros package fish 3, and the config needs fish 4, so Linux also gets
+      # the release in ~/.local/bin, which comes first on PATH.
+      github:
+        repo: fish-shell/fish-shell
+        always: true
+        assets: {amd64: fish-*-linux-x86_64.tar.xz}
+        path: fish
+    gh:
+      brew: gh
+      # From GitHub CLI's own repos, which the install scripts add.
+      apt: gh
+      dnf: gh
+    git:
+      brew: git
+      apt: git
+      dnf: git
+    gnupg:
+      brew: gnupg
+      apt: gnupg
+      dnf: gnupg2
+    grep:
+      brew: grep
+      apt: grep
+      dnf: grep
+    httpie:
+      brew: httpie
+      apt: httpie
+      dnf: httpie
+    jq:
+      brew: jq
+      apt: jq
+      dnf: jq
+    kubectl:
+      brew: kubernetes-cli
+      only: [darwin]
+    pinentry-mac:
+      brew: pinentry-mac
+      only: [darwin]
+    snapd:
+      apt: snapd
+      dnf: snapd
+      only: [ubuntu, ol]
+    speedtest-cli:
+      brew: speedtest-cli
+      apt: speedtest-cli
+      dnf: speedtest-cli
+    # The starship snap stopped updating in 2023.
+    starship:
+      brew: starship
+      github:
+        repo: starship/starship
+        assets: {amd64: starship-x86_64-unknown-linux-musl.tar.gz}
+        path: starship
+    # EPEL has no subnetcalc. ipcalc does the same job.
+    subnetcalc:
+      brew: subnetcalc
+      apt: subnetcalc
+      dnf: ipcalc
+    tree:
+      brew: tree
+      apt: tree
+      dnf: tree
+    # procps provides watch on Linux.
+    watch:
+      brew: watch
+      apt: procps
+      dnf: procps-ng
+    wget:
+      brew: wget
+      apt: wget
+      dnf: wget
+    yq:
+      brew: yq
+      dnf: yq
+      github:
+        repo: mikefarah/yq
+        assets: {amd64: yq_linux_amd64}
+
+  # macOS apps.
+  casks:
+  - dropbox
+  - flux-app
+  - gcloud-cli
+  - ghostty
+  - gitify
+  - google-chrome
+  - rectangle
+  - visual-studio-code

@@ -3,7 +3,7 @@
 # One-time shell setup. Every step is guarded so re-running is a no-op.
 set -euo pipefail
 
-{{ if has "fish" .packages.darwin.brews -}}
+{{ if hasKey .packages.tools "fish" -}}
 fish_path="$(brew --prefix)/bin/fish"
 if [ "$(dscl . -read ~/ UserShell | awk '{print $2}')" != "$fish_path" ]; then
   grep -qxF "$fish_path" /etc/shells || echo "$fish_path" | sudo tee -a /etc/shells >/dev/null
