@@ -24,6 +24,9 @@
 	dshow = -c diff.external=difft show --ext-diff
 	ddiff = -c diff.external=difft diff
 	cs = commit --signoff
+	# Fetch and check out a remote branch not covered by remote.origin.fetch. Upstream is set
+	# by hand because --track and checkout's DWIM only recognize refs matching a fetch refspec.
+	fco = "!f() { git fetch origin \"+refs/heads/$1:refs/remotes/origin/$1\" && git checkout --no-track -b \"$1\" \"origin/$1\" && git config \"branch.$1.remote\" origin && git config \"branch.$1.merge\" \"refs/heads/$1\"; }; f"
 
 [branch]
 	autosetuprebase = always
