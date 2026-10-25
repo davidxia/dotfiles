@@ -1,17 +1,27 @@
 # Directories that bash and sh (~/.config/shell/env.sh) and fish
 # (~/.config/fish/config.fish) put on PATH. Both skip directories that don't
-# exist or are already on PATH. An entry with `os` applies only when
-# .chezmoi.os matches it.
+# exist. An entry with `os` applies only when .chezmoi.os matches it.
 shell:
   path:
-    # Highest priority first, all ahead of the system PATH.
+    # Highest priority first, all ahead of the system PATH. Every shell moves
+    # these back to the front in this order, because macOS login shells put
+    # the system directories first.
     prepend:
+    # nvm sets NVM_BIN to the active Node's bin dir in login shells.
+    - dir: $NVM_BIN
     - dir: $HOME/google-cloud-sdk/bin
     - dir: $HOME/.goenv/shims
     - dir: $HOME/.goenv/bin
     - dir: $HOME/.local/bin
     - dir: $HOME/.cargo/bin
-    # After the system PATH, in this order.
+    - dir: $HOME/.krew/bin
+    - dir: $HOME/.pulumi/bin
+    - dir: $HOME/lib/oracle-cli/bin
+    - dir: /opt/homebrew/bin
+      os: darwin
+    - dir: /opt/homebrew/sbin
+      os: darwin
+    # After the system PATH, in this order. Already-present ones stay put.
     append:
     - dir: $HOME/.docker/bin
       os: darwin

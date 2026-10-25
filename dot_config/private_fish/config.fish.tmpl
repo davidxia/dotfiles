@@ -3,15 +3,17 @@
 fish_config theme choose solarized
 
 # PATH directories from .chezmoidata/shell.yaml in the chezmoi source, shared
-# with ~/.config/shell/env.sh. fish_add_path skips directories that don't exist
-# or are already on PATH.
-fish_add_path --path
+# with ~/.config/shell/env.sh. fish_add_path skips directories that don't
+# exist. --move puts the prepended ones back in front in their listed order.
+# The directories are unquoted so an unset variable adds nothing:
+# fish_add_path treats an empty string as the current directory.
+fish_add_path --path --move
 {{- range .shell.path.prepend }}
-{{-   if eq (get . "os" | default $.chezmoi.os) $.chezmoi.os }} "{{ .dir }}"{{ end }}
+{{-   if eq (get . "os" | default $.chezmoi.os) $.chezmoi.os }} {{ .dir }}{{ end }}
 {{- end }}
 fish_add_path --path --append
 {{- range .shell.path.append }}
-{{-   if eq (get . "os" | default $.chezmoi.os) $.chezmoi.os }} "{{ .dir }}"{{ end }}
+{{-   if eq (get . "os" | default $.chezmoi.os) $.chezmoi.os }} {{ .dir }}{{ end }}
 {{- end }}
 
 if test -d $HOME/.goenv
