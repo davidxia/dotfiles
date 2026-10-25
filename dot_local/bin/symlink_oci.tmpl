@@ -1,0 +1,4 @@
+{{- /* oracle-cli's bin dir is a virtualenv with its own python and pip, so
+       only its oci command goes on PATH. An empty target removes the link. */ -}}
+{{- $oci := joinPath .chezmoi.homeDir "lib/oracle-cli/bin/oci" -}}
+{{- if stat $oci }}{{ $oci }}{{ end -}}

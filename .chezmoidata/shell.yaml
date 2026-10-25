@@ -16,7 +16,6 @@ shell:
     - dir: $HOME/.cargo/bin
     - dir: $HOME/.krew/bin
     - dir: $HOME/.pulumi/bin
-    - dir: $HOME/lib/oracle-cli/bin
     - dir: /opt/homebrew/bin
       os: darwin
     - dir: /opt/homebrew/sbin
