@@ -6,6 +6,10 @@ function load_nvm --on-variable="PWD"
     set -l nvmrc_node_version (nvm version (cat $nvmrc_path))
     if test "$nvmrc_node_version" = "N/A"
       nvm install (cat $nvmrc_path)
+      # nvm doesn't enable corepack, so new Node versions lack pnpm.
+      if type -q corepack
+        corepack enable pnpm
+      end
     else if test "$nvmrc_node_version" != "$node_version"
       nvm use $nvmrc_node_version
     end
