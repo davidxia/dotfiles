@@ -4,6 +4,25 @@
     refreshPeriod = "168h"
     pull.args = ["--ff-only"]
 
+{{/* nvm's own files at its latest release. Node versions that nvm installs
+     under ~/.nvm aren't in the archive, so chezmoi leaves them alone. */ -}}
+[".nvm"]
+    type = "archive"
+    url = "https://github.com/nvm-sh/nvm/archive/refs/tags/{{ (gitHubLatestRelease "nvm-sh/nvm").TagName }}.tar.gz"
+    stripComponents = 1
+    include = ["*/nvm.sh", "*/nvm-exec", "*/bash_completion"]
+
+{{/* bass lets fish run bash scripts, which the nvm fish functions need. Its
+     latest release predates python3 support, so pin a commit instead. */ -}}
+{{ $bass := "79b62958ecf4e87334f24d6743e5766475bcf4d0" -}}
+[".config/fish/functions/bass.fish"]
+    type = "file"
+    url = "https://raw.githubusercontent.com/edc/bass/{{ $bass }}/functions/bass.fish"
+
+[".config/fish/functions/__bass.py"]
+    type = "file"
+    url = "https://raw.githubusercontent.com/edc/bass/{{ $bass }}/functions/__bass.py"
+
 {{/* Linux tools that aren't packaged for the distro. Each tracks the latest
      GitHub release; chezmoi re-checks at most once per refreshPeriod. */ -}}
 {{ if and (eq .chezmoi.os "linux") (eq .chezmoi.arch "amd64") -}}

@@ -2,12 +2,30 @@
 # terminal's color theme.
 fish_config theme choose solarized
 
-{{ if eq .chezmoi.os "darwin" -}}
-if test -d $HOME/.docker/bin
-  fish_add_path --append $HOME/.docker/bin
+# PATH directories from .chezmoidata/shell.yaml in the chezmoi source, shared
+# with ~/.config/shell/env.sh. fish_add_path skips directories that don't exist
+# or are already on PATH.
+fish_add_path --path
+{{- range .shell.path.prepend }}
+{{-   if eq (get . "os" | default $.chezmoi.os) $.chezmoi.os }} "{{ .dir }}"{{ end }}
+{{- end }}
+fish_add_path --path --append
+{{- range .shell.path.append }}
+{{-   if eq (get . "os" | default $.chezmoi.os) $.chezmoi.os }} "{{ .dir }}"{{ end }}
+{{- end }}
+
+if test -d $HOME/.goenv
+  set -gx GOENV_ROOT $HOME/.goenv
 end
 
-{{ end -}}
+# Sourcing nvm.sh through bass is slow, so only login and interactive shells put
+# nvm's Node on PATH. load_nvm also switches Node when the directory changes.
+if status --is-login; or status --is-interactive
+  if test -s $HOME/.nvm/nvm.sh; and functions -q bass
+    load_nvm > /dev/stderr
+  end
+end
+
 # needed to use gpg-agent for SSH
 if status --is-interactive
   set -x GPG_TTY (tty)
@@ -39,33 +57,14 @@ if status --is-interactive
     end
   end
 
-  if test -f $HOME/.local/bin/env.fish
-    source $HOME/.local/bin/env.fish
-  end
-
   if type -q starship
     starship init fish | source
   end
 
-  if test -d $HOME/.goenv
-    set -x GOENV_ROOT $HOME/.goenv
-    fish_add_path --path $GOENV_ROOT/bin
+  # Defines the goenv function that `goenv shell` needs, plus completions.
+  if type -q goenv
     source (goenv init - | psub)
   end
-
-  if test -f $HOME/.cargo/env.fish
-    source $HOME/.cargo/env.fish
-  end
-
-  # The nvm functions wrap nvm.sh with bass.
-  if test -s $HOME/.nvm/nvm.sh; and functions -q bass
-    load_nvm > /dev/stderr
-  end
-end
-
-# The next line updates PATH for the Google Cloud SDK.
-if test -f $HOME/google-cloud-sdk/path.fish.inc
-  source $HOME/google-cloud-sdk/path.fish.inc
 end
 
 if type -q direnv

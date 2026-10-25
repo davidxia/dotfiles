@@ -1,0 +1,20 @@
+# Directories that bash and sh (~/.config/shell/env.sh) and fish
+# (~/.config/fish/config.fish) put on PATH. Both skip directories that don't
+# exist or are already on PATH. An entry with `os` applies only when
+# .chezmoi.os matches it.
+shell:
+  path:
+    # Highest priority first, all ahead of the system PATH.
+    prepend:
+    - dir: $HOME/google-cloud-sdk/bin
+    - dir: $HOME/.goenv/shims
+    - dir: $HOME/.goenv/bin
+    - dir: $HOME/.local/bin
+    - dir: $HOME/.cargo/bin
+    # After the system PATH, in this order.
+    append:
+    - dir: $HOME/.docker/bin
+      os: darwin
+    # snapd only adds its bin dir for login shells.
+    - dir: /var/lib/snapd/snap/bin
+      os: linux
