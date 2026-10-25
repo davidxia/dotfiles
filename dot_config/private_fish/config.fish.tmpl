@@ -33,7 +33,8 @@ if status --is-interactive
   set -x GPG_TTY (tty)
 {{- if eq .chezmoi.os "darwin" }}
   set -x SSH_AUTH_SOCK (gpgconf --list-dirs agent-ssh-socket)
-  gpgconf --launch gpg-agent
+  # Connecting starts gpg-agent if it isn't running.
+  gpg-connect-agent --quiet /bye >/dev/null
 {{- end }}
 {{- if eq .chezmoi.os "linux" }}
 
@@ -61,11 +62,6 @@ if status --is-interactive
 
   if type -q starship
     starship init fish | source
-  end
-
-  # Defines the goenv function that `goenv shell` needs, plus completions.
-  if type -q goenv
-    source (goenv init - | psub)
   end
 end
 
