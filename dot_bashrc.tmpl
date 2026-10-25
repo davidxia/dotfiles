@@ -1,14 +1,5 @@
-{{ if eq .chezmoi.os "linux" -}}
-# snapd only adds its bin dir for login shells. Non-interactive commands run
-# over SSH (`ssh host chezmoi ...`) still source this file.
-case ":$PATH:" in
-  *:/var/lib/snapd/snap/bin:*) ;;
-  *) [ -d /var/lib/snapd/snap/bin ] && export PATH="$PATH:/var/lib/snapd/snap/bin" ;;
-esac
-
-{{ end -}}
-[ -f "$HOME/.cargo/env" ] && . "$HOME/.cargo/env"
-[ -f "$HOME/.local/bin/env" ] && . "$HOME/.local/bin/env"
+# Commands run over SSH (`ssh host cmd`) read only this file.
+[ -f "$HOME/.config/shell/env.sh" ] && . "$HOME/.config/shell/env.sh"
 
 [[ $- == *i* ]] || return 0
 
