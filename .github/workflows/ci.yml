@@ -1,0 +1,50 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  # Tools from GitHub releases and externals track their latest versions, so
+  # they can break without a commit here.
+  schedule:
+    - cron: "0 12 1 * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  macos:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: brew install chezmoi fish shellcheck
+      - name: Render
+        run: |
+          mkdir -p ~/.local/share
+          ln -s "$GITHUB_WORKSPACE" ~/.local/share/chezmoi
+          chezmoi init --no-tty --promptString "Work email=ci@example.com"
+          mkdir "$RUNNER_TEMP/rendered"
+          chezmoi archive --exclude externals --format tar | tar -x -C "$RUNNER_TEMP/rendered"
+      - run: .github/ci/lint.sh "$RUNNER_TEMP/rendered"
+      - name: Check every tool has an installer
+        run: |
+          gaps="$(chezmoi execute-template '{{ template "package-gaps" . }}')"
+          echo "$gaps"
+          # Linux arm64 isn't a target, so its missing assets are expected.
+          if echo "$gaps" | grep -v '^GitHub downloads without a linux/arm64 asset:' | grep -qv '(none)$'; then
+            exit 1
+          fi
+
+  linux:
+    strategy:
+      fail-fast: false
+      matrix:
+        image: ["ubuntu:24.04", "oraclelinux:9"]
+    runs-on: ubuntu-latest
+    container: ${{ matrix.image }}
+    steps:
+      - uses: actions/checkout@v4
+      - run: .github/ci/apply.sh
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
