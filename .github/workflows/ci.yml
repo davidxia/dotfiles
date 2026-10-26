@@ -46,7 +46,7 @@ jobs:
           gaps="$(chezmoi execute-template '{{ template "package-gaps" . }}')"
           echo "$gaps"
           # Linux arm64 isn't a target, so its missing assets are expected.
-          if echo "$gaps" | grep -v '^GitHub downloads without a linux/arm64 asset:' | grep -qv '(none)$'; then
+          if echo "$gaps" | grep -E '^(darwin|ubuntu|ol|GitHub downloads without a linux/amd64 asset):' | grep -qv '(none)$'; then
             exit 1
           fi
 
