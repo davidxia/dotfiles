@@ -23,6 +23,16 @@
     type = "file"
     url = "https://raw.githubusercontent.com/edc/bass/{{ $bass }}/functions/__bass.py"
 
+{{/* gcloud and gsutil completions for fish. The project has no releases, so pin
+     a commit. */ -}}
+{{ $gcloudFish := "bc24b0bf7da2addca377d89feece4487ca0b1e9c" -}}
+{{ range list "completions/gcloud.fish" "completions/gsutil.fish" "functions/gcloud_sdk_argcomplete.fish" -}}
+[".config/fish/{{ . }}"]
+    type = "file"
+    url = "https://raw.githubusercontent.com/lgathy/google-cloud-sdk-fish-completion/{{ $gcloudFish }}/{{ . }}"
+
+{{ end -}}
+
 {{/* Linux tools that .packages.tools downloads from their latest GitHub
      release. chezmoi re-checks at most once per refreshPeriod. */ -}}
 {{ if eq .chezmoi.os "linux" -}}

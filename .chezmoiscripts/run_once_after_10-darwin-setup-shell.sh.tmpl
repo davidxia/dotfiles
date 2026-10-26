@@ -9,27 +9,5 @@ if [ "$(dscl . -read ~/ UserShell | awk '{print $2}')" != "$fish_path" ]; then
   grep -qxF "$fish_path" /etc/shells || echo "$fish_path" | sudo tee -a /etc/shells >/dev/null
   chsh -s "$fish_path"
 fi
-
-# https://github.com/oh-my-fish/oh-my-fish
-if [ ! -d ~/.local/share/omf ]; then
-  omf_installer="$(mktemp)"
-  curl -fsSL https://raw.githubusercontent.com/oh-my-fish/oh-my-fish/master/bin/install -o "$omf_installer"
-  fish "$omf_installer" --noninteractive
-  rm -f "$omf_installer"
-fi
-# Each entry is <package dir name>=<omf registry name or git URL>.
-# omf install exits 0 even on failure, so check the package dir afterwards.
-for entry in \
-  google-cloud-sdk-fish-completion=https://github.com/lgathy/google-cloud-sdk-fish-completion; do
-  pkg="${entry%%=*}"
-  src="${entry#*=}"
-  if [ ! -d ~/.local/share/omf/pkg/"$pkg" ]; then
-    fish -c "omf install $src"
-    if [ ! -d ~/.local/share/omf/pkg/"$pkg" ]; then
-      echo "omf install $src failed" >&2
-      exit 1
-    fi
-  fi
-done
 {{ end -}}
 {{ end -}}
