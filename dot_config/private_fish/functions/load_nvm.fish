@@ -47,8 +47,12 @@ function load_nvm --on-variable="PWD"
     else if test "$nvmrc_node_version" != "$current"
       nvm use $nvmrc_node_version
     end
-  else if test (nvm version default) != "$current"
-    echo "Reverting to default Node version"
-    nvm use default
+  else if test -f $nvm_dir/alias/default
+    # Without a default, there's no Node to revert to.
+    set -l default_version (nvm version default)
+    if test "$default_version" != N/A; and test "$default_version" != "$current"
+      echo "Reverting to default Node version"
+      nvm use default
+    end
   end
 end

@@ -2,7 +2,8 @@
 
 # Only login shells put nvm's default Node on PATH. Sourcing nvm.sh takes 100 to
 # 200 ms, so when the default is an exact, installed version, set up its PATH,
-# NVM_BIN, and NVM_INC directly and load nvm.sh the first time nvm runs.
+# NVM_BIN, and NVM_INC directly and load nvm.sh the first time nvm runs. Without
+# a default, there's no Node to put on PATH, so nvm.sh also waits until nvm runs.
 export NVM_DIR="$HOME/.nvm"
 if [ -s "$NVM_DIR/nvm.sh" ]; then
   _nvm_default=
@@ -18,13 +19,19 @@ if [ -s "$NVM_DIR/nvm.sh" ]; then
     export NVM_BIN="$NVM_DIR/versions/node/$_nvm_exact/bin"
     export NVM_INC="$NVM_DIR/versions/node/$_nvm_exact/include/node"
     export PATH="$NVM_BIN:$PATH"
+  elif [ -n "$_nvm_default" ]; then
+    . "$NVM_DIR/nvm.sh"
+  fi
+  if ! command -v nvm >/dev/null; then
     nvm() {
       unset -f nvm
-      . "$NVM_DIR/nvm.sh" --no-use
+      # nvm.sh reads --no-use from the positional parameters. POSIX sh's dot
+      # command takes no arguments, so set them around it.
+      set -- --no-use "$@"
+      . "$NVM_DIR/nvm.sh"
+      shift
       nvm "$@"
     }
-  else
-    . "$NVM_DIR/nvm.sh"
   fi
   unset _nvm_default _nvm_exact
 fi

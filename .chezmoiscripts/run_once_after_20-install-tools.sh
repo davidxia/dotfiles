@@ -10,5 +10,7 @@ fi
 
 # https://docs.astral.sh/uv/getting-started/installation/
 if ! command -v uv >/dev/null && [ ! -x ~/.local/bin/uv ]; then
-  curl -LsSf https://astral.sh/uv/install.sh | sh
+  # ~/.config/shell/env.sh already puts ~/.local/bin on PATH, so keep the
+  # installer from editing the shell startup files chezmoi manages.
+  curl -LsSf https://astral.sh/uv/install.sh | env UV_NO_MODIFY_PATH=1 sh
 fi
