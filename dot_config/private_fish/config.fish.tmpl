@@ -74,6 +74,7 @@ if status --is-interactive
   end
 end
 
-if type -q direnv
+# Homebrew's direnv loads the hook from vendor_conf.d before this file runs.
+if type -q direnv; and not functions -q __direnv_export_eval
   direnv hook fish | source
 end
