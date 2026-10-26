@@ -13,6 +13,16 @@ on:
 permissions:
   contents: read
 
+env:
+  # chezmoi uses it for gitHubLatestRelease, which hits the anonymous API rate
+  # limit on shared runner IPs.
+  GITHUB_TOKEN: ${{ github.token }}
+
+defaults:
+  run:
+    # Unlike the default shell, adds -o pipefail.
+    shell: bash
+
 jobs:
   macos:
     runs-on: macos-latest
@@ -50,5 +60,3 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: .github/ci/apply.sh
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
