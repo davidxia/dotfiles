@@ -18,9 +18,13 @@ jobs:
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v4
-      - run: brew install chezmoi fish shellcheck
+      - run: brew install fish shellcheck
       - name: Render
+        # The runner's Homebrew can lag chezmoi releases and .chezmoiversion.
         run: |
+          sh -c "$(curl -fsLS get.chezmoi.io)" -- -b "$HOME/.local/bin"
+          echo "$HOME/.local/bin" >>"$GITHUB_PATH"
+          export PATH="$HOME/.local/bin:$PATH"
           mkdir -p ~/.local/share
           ln -s "$GITHUB_WORKSPACE" ~/.local/share/chezmoi
           chezmoi init --no-tty --promptString "Work email=ci@example.com"
